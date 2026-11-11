@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI Academy — AI Automation Programme Test</title>
+<meta name="description" content="A timed 20-question multiple-choice test for the AI Academy AI Automation Programme.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{--paper:#FAF6EE;--ink:#191612;--ink-soft:#5B5349;--line:#E2D9C9;--card:#FFFDF8;--dark:#17140F;--cream:#F7F1E4;--amber:#C87515;--teal:#12776C;--violet:#5B4EA6;--rust:#B03A22;--ok:#12776C;--warn:#B03A22;--r:14px;--shadow:0 1px 2px rgba(25,22,18,.05),0 8px 28px -12px rgba(25,22,18,.18);--sans:'IBM Plex Sans',system-ui,-apple-system,'Segoe UI',sans-serif;--head:'Space Grotesk','IBM Plex Sans',system-ui,sans-serif;--mono:'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased}
+.wrap{max-width:860px;margin:0 auto;padding:40px 20px 64px}
+.screen{display:none}.screen.on{display:block}
+.eyebrow{display:inline-block;font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--amber);background:#F6E6CE;border:1px solid #EBCFA3;padding:5px 12px;border-radius:999px}
+h1{font-family:var(--head);font-weight:700;font-size:clamp(32px,6vw,46px);line-height:1.08;margin:18px 0 14px;letter-spacing:-.02em}
+h2{font-family:var(--head);font-weight:700;font-size:22px;margin:34px 0 14px}
+.lead{color:var(--ink-soft);max-width:62ch;margin:0 0 26px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:8px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:16px 18px;box-shadow:var(--shadow)}
+.stat b{display:block;font-family:var(--head);font-size:28px;line-height:1.1}
+.stat span{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft)}
+.rules{list-style:none;padding:0;margin:0;display:grid;gap:10px}
+.rules li{display:flex;gap:14px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:13px 16px;font-size:15px}
+.rules li i{font-style:normal;font-family:var(--mono);font-size:12px;color:var(--amber);padding-top:3px}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:22px;box-shadow:var(--shadow)}
+.panel h3{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-soft);margin:0 0 14px;font-weight:500}
+label.f{display:block;font-size:13px;font-weight:600;margin:0 0 6px}
+input[type=text],input[type=email]{width:100%;font:inherit;padding:11px 13px;border:1px solid #D4C9B4;border-radius:10px;background:#fff;color:var(--ink);margin-bottom:14px}
+input:focus{outline:2px solid var(--amber);outline-offset:1px}
+.agree{display:flex;gap:10px;align-items:flex-start;font-size:14px;color:var(--ink-soft);margin:4px 0 18px}
+.agree input{margin-top:4px;width:17px;height:17px;accent-color:var(--amber)}
+button{font:inherit;cursor:pointer}
+.btn{background:var(--dark);color:var(--cream);border:0;border-radius:11px;padding:13px 22px;font-weight:600}
+.btn:hover{background:#2b261d}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid #CFC3AB}
+.btn.ghost:hover{background:#F1EADB}
+.btn.amber{background:var(--amber)}
+.err{color:var(--warn);font-size:14px;min-height:20px;margin:0 0 12px}
+.steps{list-style:none;padding:0;margin:0 0 22px;display:grid;gap:10px}
+.steps li{display:flex;gap:14px;font-size:15px}
+.steps li i{font-style:normal;flex:none;width:26px;height:26px;border-radius:50%;background:var(--dark);color:var(--cream);font-family:var(--mono);font-size:12px;display:flex;align-items:center;justify-content:center}
+.status{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:12px;padding:6px 12px;border-radius:999px;background:#F6E3DE;color:var(--rust);margin-bottom:18px}
+.status.ok{background:#DDF0EC;color:var(--ok)}
+.status::before{content:"";width:8px;height:8px;border-radius:50%;background:currentColor}
+.foot{margin-top:34px;font-size:13px;color:var(--ink-soft)}
+/* exam */
+#s-exam{padding:0}
+.bar{position:sticky;top:0;z-index:20;background:var(--dark);color:var(--cream);display:flex;gap:18px;align-items:center;justify-content:space-between;padding:12px 20px;font-family:var(--mono);font-size:13px}
+.bar .who{opacity:.75;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:34%}
+.bar .viol{opacity:.9}
+.bar .viol.hot{color:#FFB4A3}
+.timer{font-size:22px;font-weight:500;letter-spacing:.04em;background:#2b261d;padding:6px 14px;border-radius:9px}
+.timer.warn{color:#FFD08A}
+.timer.crit{color:#FF9C86;animation:pulse 1s infinite}
+@keyframes pulse{50%{opacity:.55}}
+.exam{max-width:1040px;margin:0 auto;padding:28px 20px 56px;display:grid;grid-template-columns:1fr 250px;gap:24px;align-items:start}
+.qcard{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:26px;box-shadow:var(--shadow)}
+.qmeta{display:flex;justify-content:space-between;gap:10px;font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:14px}
+.qtopic{color:var(--amber)}
+.qtext{font-family:var(--head);font-size:21px;line-height:1.35;font-weight:500;margin:0 0 20px;user-select:none}
+.opts{display:grid;gap:10px}
+.opt{display:flex;gap:12px;align-items:flex-start;text-align:left;width:100%;background:#fff;border:1.5px solid var(--line);border-radius:12px;padding:13px 15px;color:var(--ink);user-select:none}
+.opt:hover{border-color:#C9BBA0}
+.opt .k{flex:none;width:26px;height:26px;border-radius:7px;border:1.5px solid #CFC3AB;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:12px}
+.opt.sel{border-color:var(--amber);background:#FDF3E3}
+.opt.sel .k{background:var(--amber);border-color:var(--amber);color:#fff}
+.nav{display:flex;justify-content:space-between;gap:10px;margin-top:22px;flex-wrap:wrap}
+.side{position:sticky;top:76px}
+.prog{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:12px}
+.grid{display:grid;grid-template-columns:repeat(5,1fr);gap:7px;margin-bottom:18px}
+.grid button{aspect-ratio:1;border-radius:9px;border:1.5px solid var(--line);background:#fff;font-family:var(--mono);font-size:12px;color:var(--ink-soft)}
+.grid button.done{background:var(--dark);border-color:var(--dark);color:var(--cream)}
+.grid button.cur{outline:2px solid var(--amber);outline-offset:1px}
+.side .btn{width:100%}
+/* results */
+.big{display:flex;gap:20px;align-items:center;flex-wrap:wrap;margin:6px 0 22px}
+.score{font-family:var(--head);font-size:64px;font-weight:700;line-height:1}
+.score small{font-size:26px;color:var(--ink-soft);font-weight:500}
+.verdict{font-family:var(--mono);font-size:13px;letter-spacing:.1em;text-transform:uppercase;padding:8px 16px;border-radius:999px;background:#EDE5D4}
+.verdict.pass{background:#DDF0EC;color:var(--ok)}
+.verdict.fail{background:#F6E3DE;color:var(--rust)}
+.kv{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:8px}
+.brow{display:grid;grid-template-columns:200px 1fr 60px;gap:12px;align-items:center;margin-bottom:12px;font-size:14px}
+.track{height:10px;background:#EDE5D4;border-radius:99px;overflow:hidden}
+.fill{height:100%;background:var(--teal);border-radius:99px}
+.fill.low{background:var(--rust)}
+.brow span:last-child{font-family:var(--mono);text-align:right;font-size:13px}
+.sent{margin:22px 0;font-size:14px;color:var(--ink-soft)}
+/* overlays */
+.gate,.modalbg{position:fixed;inset:0;background:rgba(23,20,15,.82);display:none;align-items:center;justify-content:center;z-index:50;padding:20px}
+.gate.on,.modalbg.on{display:flex}
+.box{background:var(--card);border-radius:var(--r);padding:28px;max-width:460px;width:100%;box-shadow:var(--shadow)}
+.box h3{font-family:var(--head);font-size:22px;margin:0 0 10px}
+.box p{margin:0 0 20px;color:var(--ink-soft)}
+.box .row{display:flex;gap:10px;flex-wrap:wrap}
+#toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(20px);background:var(--dark);color:var(--cream);padding:11px 18px;border-radius:11px;font-size:14px;opacity:0;pointer-events:none;transition:.25s;z-index:60}
+#toast.on{opacity:1;transform:translateX(-50%)}
+@media(max-width:760px){.stats,.kv{grid-template-columns:repeat(2,1fr)}.exam{grid-template-columns:1fr}.side{position:static}.brow{grid-template-columns:1fr 60px}.brow .track{grid-column:1/-1;order:3}.bar .who{display:none}}
+</style>
+</head>
+<body>
+<div id="toast"></div>
+
+<main class="wrap screen on" id="s-rules">
+  <span class="eyebrow">AI Academy · Class Test</span>
+  <h1>AI Automation Programme Test</h1>
+  <p class="lead">A timed, proctored multiple-choice test on what you have been taught: prompt engineering, image and video generation, website generation, Make.com, and scrapers and lead generation.</p>
+  <div class="stats">
+    <div class="stat"><b id="f-q">20</b><span>Questions</span></div>
+    <div class="stat"><b id="f-m">20</b><span>Minutes</span></div>
+    <div class="stat"><b id="f-p">70%</b><span>Pass mark</span></div>
+    <div class="stat"><b>1</b><span>Attempt only</span></div>
+  </div>
+  <h2>Test rules — read carefully</h2>
+  <ol class="rules" id="rules-list"></ol>
+  <h2>Candidate details</h2>
+  <div class="panel">
+    <label class="f" for="c-name">Full name</label>
+    <input type="text" id="c-name" autocomplete="name">
+    <label class="f" for="c-email">Email address</label>
+    <input type="email" id="c-email" autocomplete="email">
+    <label class="agree"><input type="checkbox" id="c-agree"><span>I have read and understood the rules above, and I agree to comply with them. I understand that my screen will be shared and that violations are logged and reported to my instructor.</span></label>
+    <p class="err" id="e-rules"></p>
+    <button class="btn" id="go-setup">Continue to screen sharing setup</button>
+  </div>
+  <p class="foot">AI Academy · AI Automation Programme. Works best in Chrome or Edge on a laptop or desktop.</p>
+</main>
+
+<main class="wrap screen" id="s-setup">
+  <span class="eyebrow">Step 2 of 2</span>
+  <h1>Screen sharing setup</h1>
+  <p class="lead">Your instructor needs your whole screen shared while you take the test. Nothing is recorded to a file by this page.</p>
+  <div class="panel">
+    <ol class="steps">
+      <li><i>1</i><span>Click the button below. Your browser will open a sharing window.</span></li>
+      <li><i>2</i><span>Choose <b>Entire Screen</b>. A single tab or window will be rejected.</span></li>
+      <li><i>3</i><span>Click Share. The test will start in fullscreen straight away and the timer begins.</span></li>
+    </ol>
+    <div class="status" id="d-share">Screen not shared</div>
+    <p class="err" id="e-setup"></p>
+    <div class="row" style="display:flex;gap:10px;flex-wrap:wrap">
+      <button class="btn amber" id="go-exam">Start screen sharing and begin test</button>
+      <button class="btn ghost" id="back-rules">Back to rules</button>
+    </div>
+    <p class="foot" id="t-share">If the sharing window does not open, check that your browser is allowed to share your screen, then try again.</p>
+  </div>
+</main>
+
+<section class="screen" id="s-exam">
+  <div class="bar">
+    <span class="who" id="b-who"></span>
+    <span class="viol" id="b-viol">Violations: 0</span>
+    <span class="timer" id="b-timer">20:00</span>
+  </div>
+  <div class="exam">
+    <div class="qcard">
+      <div class="qmeta"><span id="q-num">Question 1 of 20</span><span class="qtopic" id="q-topic"></span></div>
+      <p class="qtext" id="q-text"></p>
+      <div class="opts" id="q-opts"></div>
+      <div class="nav">
+        <button class="btn ghost" id="prev">← Previous</button>
+        <button class="btn" id="next">Next →</button>
+      </div>
+    </div>
+    <aside class="side">
+      <div class="prog" id="b-prog">Progress — <span id="g-count">0</span> of <span id="g-total">20</span> answered</div>
+      <div class="grid" id="q-grid"></div>
+      <button class="btn amber" id="submit">Submit test</button>
+    </aside>
+  </div>
+</section>
+
+<main class="wrap screen" id="s-results">
+  <span class="eyebrow">AI Academy · Class Test</span>
+  <h1>Your result</h1>
+  <div class="big">
+    <div class="score"><span id="r-score">0</span><small> / <span id="r-total">20</span></small></div>
+    <div class="score" style="font-size:36px"><span id="r-pct">0%</span></div>
+    <div class="verdict" id="r-verdict">—</div>
+  </div>
+  <div class="kv">
+    <div class="stat"><b id="r-time">—</b><span>Time used</span></div>
+    <div class="stat"><b id="r-viol">0</b><span>Violations</span></div>
+    <div class="stat"><b id="r-ans">0</b><span>Answered</span></div>
+    <div class="stat"><b id="r-status" style="font-size:20px">Complete</b><span>Status</span></div>
+  </div>
+  <h2>Score by topic</h2>
+  <div class="panel" id="r-break"></div>
+  <p class="sent" id="r-sent"></p>
+  <button class="btn" id="dl">Download my result receipt</button>
+</main>
+
+<div class="gate" id="gate"><div class="box"><h3 id="gate-t"></h3><p id="gate-p"></p><div class="row"><button class="btn amber" id="gate-b"></button></div></div></div>
+<div class="modalbg" id="modal"><div class="box"><h3 id="m-title"></h3><p id="m-body"></p><div class="row"><button class="btn" id="m-yes">Yes, submit</button><button class="btn ghost" id="m-no">Keep working</button></div></div></div>
+
+<script>
+/* ---------- Settings ---------- */
+const CONFIG={
+  minutes:20,
+  passMark:70,
+  maxViolations:5,
+  /* Optional: a URL that accepts a JSON POST (Google Apps Script, Formspree, etc.). Leave empty to use the downloadable receipt only. */
+  endpoint:""
+};
+const TOPICS=["Prompt engineering", "Image and video generation", "Website generation", "Make.com", "Scrapers and lead generation"];
+const RAW=[{"t": "Prompt engineering", "q": "Which prompt is most likely to give a useful first draft of a marketing email?", "o": ["Marketing email, lip oil, make it nice.", "Write an email about our product.", "Act as a copywriter for a Lagos beauty brand. Write a 100-word email to women aged 20 to 35 announcing a new lip oil. Friendly tone, one call to action.", "Write something good for my business and make it long."], "c": "QWN0IGFzIGEgY29weXdyaXRlciBmb3IgYSBMYWdvcyBiZWF1dHkgYnJhbmQuIFdyaXRlIGEgMTAwLXdvcmQgZW1haWwgdG8gd29tZW4gYWdlZCAyMCB0byAzNSBhbm5vdW5jaW5nIGEgbmV3IGxpcCBvaWwuIEZyaWVuZGx5IHRvbmUsIG9uZSBjYWxsIHRvIGFjdGlvbi4="}, {"t": "Prompt engineering", "q": "What is few-shot prompting?", "o": ["Asking the AI the same question a few times and picking the shortest answer", "Limiting the AI to a few words in its reply", "Running the prompt on a few different tools at once", "Giving the AI a few examples of the input and the output you want before asking for the real task"], "c": "R2l2aW5nIHRoZSBBSSBhIGZldyBleGFtcGxlcyBvZiB0aGUgaW5wdXQgYW5kIHRoZSBvdXRwdXQgeW91IHdhbnQgYmVmb3JlIGFza2luZyBmb3IgdGhlIHJlYWwgdGFzaw=="}, {"t": "Prompt engineering", "q": "When is chain-of-thought prompting most useful?", "o": ["When you want the shortest possible reply", "When the task needs several steps of reasoning, so you ask the AI to work through the steps before it gives the answer", "When you want the AI to skip explaining and just guess", "When you want the AI to copy your writing style exactly"], "c": "V2hlbiB0aGUgdGFzayBuZWVkcyBzZXZlcmFsIHN0ZXBzIG9mIHJlYXNvbmluZywgc28geW91IGFzayB0aGUgQUkgdG8gd29yayB0aHJvdWdoIHRoZSBzdGVwcyBiZWZvcmUgaXQgZ2l2ZXMgdGhlIGFuc3dlcg=="}, {"t": "Prompt engineering", "q": "An AI step in Make must pass its answer to a Parse JSON module. Which part of the prompt matters most for this?", "o": ["Telling the AI to write as long as it likes", "Asking the AI to be creative", "A clear output format, such as \"return only JSON with these keys\"", "A friendly greeting at the start"], "c": "QSBjbGVhciBvdXRwdXQgZm9ybWF0LCBzdWNoIGFzICJyZXR1cm4gb25seSBKU09OIHdpdGggdGhlc2Uga2V5cyI="}, {"t": "Image and video generation", "q": "In the image labs, what does \"one style lock\" mean?", "o": ["Generate only one image per project", "Paste the same style line at the end of every image prompt so all images look like one set", "Use only one image tool for the whole month", "Lock your screen so nobody else can edit the prompt"], "c": "UGFzdGUgdGhlIHNhbWUgc3R5bGUgbGluZSBhdCB0aGUgZW5kIG9mIGV2ZXJ5IGltYWdlIHByb21wdCBzbyBhbGwgaW1hZ2VzIGxvb2sgbGlrZSBvbmUgc2V0"}, {"t": "Image and video generation", "q": "In a talking cartoon made of several clips, what does \"one voice per character\" mean?", "o": ["Record one long voice track and cut the clips to fit it", "Let the AI choose a new voice each time and fix it later", "Repeat the same voice description in every clip for that character, with one speaker per clip", "Use a different voice in every clip so the audience does not get bored"], "c": "UmVwZWF0IHRoZSBzYW1lIHZvaWNlIGRlc2NyaXB0aW9uIGluIGV2ZXJ5IGNsaXAgZm9yIHRoYXQgY2hhcmFjdGVyLCB3aXRoIG9uZSBzcGVha2VyIHBlciBjbGlw"}, {"t": "Image and video generation", "q": "Gemini makes a product image with the brand name on it, but one letter in the name is wrong. What should you do?", "o": ["Publish it, because viewers will not notice one letter", "Delete the brand name from the brief", "Add a caption saying the spelling is a mistake", "Zoom in, check every letter, and run the prompt again until the name is spelled correctly"], "c": "Wm9vbSBpbiwgY2hlY2sgZXZlcnkgbGV0dGVyLCBhbmQgcnVuIHRoZSBwcm9tcHQgYWdhaW4gdW50aWwgdGhlIG5hbWUgaXMgc3BlbGxlZCBjb3JyZWN0bHk="}, {"t": "Image and video generation", "q": "Why do we create the product image and the person holding it in the same Gemini chat?", "o": ["Because it makes the video render faster", "So Gemini can keep the exact same product, cap and colours in the second image", "Because a new chat makes the image lower quality", "Because Gemini can only make two images per chat"], "c": "U28gR2VtaW5pIGNhbiBrZWVwIHRoZSBleGFjdCBzYW1lIHByb2R1Y3QsIGNhcCBhbmQgY29sb3VycyBpbiB0aGUgc2Vjb25kIGltYWdl"}, {"t": "Image and video generation", "q": "Which line must NOT be spoken by an AI presenter in a client's ad?", "o": ["\"Meet the new Warm Honey lip oil from KORA.\"", "\"Send us a message on WhatsApp to order.\"", "\"I used this lip oil for two weeks and my lips have never felt better.\"", "\"This presenter is AI-generated.\""], "c": "IkkgdXNlZCB0aGlzIGxpcCBvaWwgZm9yIHR3byB3ZWVrcyBhbmQgbXkgbGlwcyBoYXZlIG5ldmVyIGZlbHQgYmV0dGVyLiI="}, {"t": "Website generation", "q": "Which prompt gives the best first version of a business website in a tool like V0 or Bolt?", "o": ["\"Build me a website.\"", "A copy of the competitor's website address", "\"Build a modern website that looks professional.\"", "One that names the business, the customer, the sections in order, the colours, and the form fields"], "c": "T25lIHRoYXQgbmFtZXMgdGhlIGJ1c2luZXNzLCB0aGUgY3VzdG9tZXIsIHRoZSBzZWN0aW9ucyBpbiBvcmRlciwgdGhlIGNvbG91cnMsIGFuZCB0aGUgZm9ybSBmaWVsZHM="}, {"t": "Website generation", "q": "Why must you test your finished website on a phone?", "o": ["Testing on a phone is only needed for the company logo", "Most visitors will open it on a phone, so the layout and the form must work at that size", "Phones show the website with different content", "Websites only work on phones if they were built with AI"], "c": "TW9zdCB2aXNpdG9ycyB3aWxsIG9wZW4gaXQgb24gYSBwaG9uZSwgc28gdGhlIGxheW91dCBhbmQgdGhlIGZvcm0gbXVzdCB3b3JrIGF0IHRoYXQgc2l6ZQ=="}, {"t": "Website generation", "q": "What connects a website's enquiry form to a Make scenario?", "o": ["A screenshot of the form", "The website's font settings", "The colour palette", "A webhook URL that receives the form data"], "c": "QSB3ZWJob29rIFVSTCB0aGF0IHJlY2VpdmVzIHRoZSBmb3JtIGRhdGE="}, {"t": "Make.com", "q": "What is a Make scenario?", "o": ["A report of how many people visited your site", "A website that Make builds for you", "A chain of connected modules that runs in order, starting with a trigger", "A single prompt saved in a notebook"], "c": "QSBjaGFpbiBvZiBjb25uZWN0ZWQgbW9kdWxlcyB0aGF0IHJ1bnMgaW4gb3JkZXIsIHN0YXJ0aW5nIHdpdGggYSB0cmlnZ2Vy"}, {"t": "Make.com", "q": "Why do we put filters before the AI module?", "o": ["Because AI modules cannot run without a filter in front", "Because filters change the AI's language", "So only the items that passed the filter use AI and operations, which saves credits", "Because filters make the AI answer longer"], "c": "U28gb25seSB0aGUgaXRlbXMgdGhhdCBwYXNzZWQgdGhlIGZpbHRlciB1c2UgQUkgYW5kIG9wZXJhdGlvbnMsIHdoaWNoIHNhdmVzIGNyZWRpdHM="}, {"t": "Make.com", "q": "What does the Parse JSON module do after an AI step?", "o": ["Checks whether the AI's answer is true", "Deletes the AI's answer after the scenario finishes", "Translates the answer into another language", "Turns the AI's JSON text into separate fields that later modules, like Google Sheets, can use"], "c": "VHVybnMgdGhlIEFJJ3MgSlNPTiB0ZXh0IGludG8gc2VwYXJhdGUgZmllbGRzIHRoYXQgbGF0ZXIgbW9kdWxlcywgbGlrZSBHb29nbGUgU2hlZXRzLCBjYW4gdXNl"}, {"t": "Make.com", "q": "You have finished testing a scenario that scrapes and uses AI. What should you do so you do not waste credits?", "o": ["Keep Max items small and switch the scenario off, instead of leaving it on a schedule", "Leave it running every minute so it is always ready", "Raise Max items to the maximum so you never run out of data", "Delete your Make account"], "c": "S2VlcCBNYXggaXRlbXMgc21hbGwgYW5kIHN3aXRjaCB0aGUgc2NlbmFyaW8gb2ZmLCBpbnN0ZWFkIG9mIGxlYXZpbmcgaXQgb24gYSBzY2hlZHVsZQ=="}, {"t": "Scrapers and lead generation", "q": "In the Apify and Make setup, what does the \"Get Dataset Items\" module do?", "o": ["Reads the results the scraper collected so the next modules can use each item", "Publishes the results on social media", "Starts the scraper from scratch", "Pays for the scraper"], "c": "UmVhZHMgdGhlIHJlc3VsdHMgdGhlIHNjcmFwZXIgY29sbGVjdGVkIHNvIHRoZSBuZXh0IG1vZHVsZXMgY2FuIHVzZSBlYWNoIGl0ZW0="}, {"t": "Scrapers and lead generation", "q": "A video has 50,000 views and its creator has 10,000 followers. What is the reach ratio (views ÷ followers × 100)?", "o": ["5,000", "500", "50", "5"], "c": "NTAw"}, {"t": "Scrapers and lead generation", "q": "A ratio filter throws an error on some scraped posts. One likely cause is a post whose creator has 0 followers. What is the fix?", "o": ["Ask the AI to guess the followers", "Put a filter row \"followers greater than 0\" before the ratio rows", "Divide by 100 instead of by the followers", "Delete the filter and keep every post"], "c": "UHV0IGEgZmlsdGVyIHJvdyAiZm9sbG93ZXJzIGdyZWF0ZXIgdGhhbiAwIiBiZWZvcmUgdGhlIHJhdGlvIHJvd3M="}, {"t": "Scrapers and lead generation", "q": "An AI writes a first message to a business found on Google Maps. What should the message be based on?", "o": ["A promise of results, so the lead replies", "Any compliment or statistic that sounds convincing", "Made-up customer reviews to build trust", "Only the facts from that business's listing and the facts the client has confirmed, with nothing invented"], "c": "T25seSB0aGUgZmFjdHMgZnJvbSB0aGF0IGJ1c2luZXNzJ3MgbGlzdGluZyBhbmQgdGhlIGZhY3RzIHRoZSBjbGllbnQgaGFzIGNvbmZpcm1lZCwgd2l0aCBub3RoaW5nIGludmVudGVk"}];
+
+/* ---------- Helpers ---------- */
+const $=id=>document.getElementById(id);
+const dec=s=>decodeURIComponent(escape(atob(s)));
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const pad=n=>String(n).padStart(2,'0');
+const fmt=s=>pad(Math.floor(s/60))+':'+pad(s%60);
+function toast(m){const t=$('toast');t.textContent=m;t.classList.add('on');clearTimeout(toast.h);toast.h=setTimeout(()=>t.classList.remove('on'),2600)}
+function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('on'));$(id).classList.add('on');window.scrollTo(0,0)}
+
+/* ---------- Rules ---------- */
+const RULES=[
+ `You have <b>${CONFIG.minutes} minutes</b> to answer all <b>${RAW.length} questions</b>. A countdown timer is visible at the top of the screen at all times.`,
+ 'You get one attempt. The test submits automatically the moment the timer reaches zero, whether or not you have finished.',
+ 'You must share your entire screen for the full duration of the test. Sharing a single tab or window will be rejected.',
+ 'The test runs in fullscreen mode. Leaving fullscreen is recorded as a violation.',
+ 'Switching tabs, switching applications, or losing window focus is recorded as a violation with a timestamp.',
+ 'Copy, paste, right-click and developer shortcuts are disabled. Attempts are logged.',
+ 'Questions and answer options are shuffled for every candidate. Each question has exactly one correct answer.',
+ 'Use Previous and Next to review and change answers. The progress grid shows which questions you have answered.',
+ 'No notes, printed materials, second devices, browser extensions, AI tools, external assistance or collaboration of any kind.',
+ `${CONFIG.maxViolations} violations will end your test early and flag your submission for instructor review.`
+];
+$('rules-list').innerHTML=RULES.map((r,i)=>`<li><i>${pad(i+1)}</i><span>${r}</span></li>`).join('');
+$('f-q').textContent=RAW.length;$('f-m').textContent=CONFIG.minutes;$('f-p').textContent=CONFIG.passMark+'%';
+
+/* ---------- State ---------- */
+let cand={},qs=[],ans=[],cur=0,left=0,tick=null,startedAt=0,violations=0,vlog=[],stream=null,running=false,finished=false,lastV=0,gateKind=null;
+
+/* ---------- Screen 1 ---------- */
+$('go-setup').onclick=()=>{
+  const n=$('c-name').value.trim(),e=$('c-email').value.trim().toLowerCase();
+  if(n.length<3){return $('e-rules').textContent='Please enter your full name.'}
+  if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(e)){return $('e-rules').textContent='Please enter a valid email address.'}
+  if(!$('c-agree').checked){return $('e-rules').textContent='You must agree to the rules to continue.'}
+  try{if(localStorage.getItem('aiacademy-test-done:'+e)){return $('e-rules').textContent='This email has already submitted the test. Only one attempt is allowed.'}}catch(_){}
+  $('e-rules').textContent='';cand={name:n,email:e};show('s-setup');
+};
+$('back-rules').onclick=()=>show('s-rules');
+
+/* ---------- Screen sharing and start ---------- */
+$('go-exam').onclick=async()=>{
+  $('e-setup').textContent='';
+  if(!navigator.mediaDevices||!navigator.mediaDevices.getDisplayMedia){return $('e-setup').textContent='This browser cannot share the screen. Use Chrome or Edge on a laptop or desktop.'}
+  try{
+    stream=await navigator.mediaDevices.getDisplayMedia({video:{displaySurface:'monitor'},audio:false});
+  }catch(err){return $('e-setup').textContent='Screen sharing was cancelled or blocked. You must share your entire screen to start.'}
+  const tr=stream.getVideoTracks()[0],st=tr.getSettings?tr.getSettings():{};
+  if(st.displaySurface&&st.displaySurface!=='monitor'){tr.stop();stream=null;$('d-share').textContent='Screen not shared';return $('e-setup').textContent='You shared a tab or window. Please choose "Entire Screen" and try again.'}
+  $('d-share').textContent='Entire screen shared';$('d-share').classList.add('ok');
+  tr.onended=()=>{if(running)violation('Screen sharing stopped',true)};
+  try{await document.documentElement.requestFullscreen()}catch(_){}
+  begin();
+};
+
+function begin(){
+  qs=shuffle(RAW).map(q=>{const correct=dec(q.c);return{topic:q.t,q:q.q,o:shuffle(q.o),correct}});
+  ans=new Array(qs.length).fill(null);cur=0;left=CONFIG.minutes*60;startedAt=Date.now();violations=0;vlog=[];running=true;finished=false;
+  $('b-who').textContent=cand.name;$('b-viol').textContent='Violations: 0';$('b-viol').classList.remove('hot');
+  $('g-total').textContent=qs.length;
+  $('q-grid').innerHTML=qs.map((_,i)=>`<button data-i="${i}">${i+1}</button>`).join('');
+  $('q-grid').onclick=e=>{const b=e.target.closest('button');if(b){cur=+b.dataset.i;render()}};
+  show('s-exam');render();paintTimer();
+  tick=setInterval(()=>{const used=Math.floor((Date.now()-startedAt)/1000);left=Math.max(0,CONFIG.minutes*60-used);paintTimer();if(left<=0)finish('Time up: auto-submitted')},500);
+}
+function paintTimer(){const t=$('b-timer');t.textContent=fmt(left);t.classList.toggle('warn',left<=300&&left>60);t.classList.toggle('crit',left<=60)}
+
+function render(){
+  const q=qs[cur];
+  $('q-num').textContent=`Question ${cur+1} of ${qs.length}`;
+  $('q-topic').textContent=q.topic;
+  $('q-text').textContent=q.q;
+  $('q-opts').innerHTML=q.o.map((o,i)=>`<button class="opt${ans[cur]===i?' sel':''}" data-i="${i}"><span class="k">${'ABCD'[i]}</span><span></span></button>`).join('');
+  [...$('q-opts').children].forEach((b,i)=>b.lastChild.textContent=q.o[i]);
+  $('q-opts').onclick=e=>{const b=e.target.closest('.opt');if(!b)return;ans[cur]=+b.dataset.i;render()};
+  $('prev').disabled=cur===0;$('next').disabled=cur===qs.length-1;
+  [...$('q-grid').children].forEach((b,i)=>{b.classList.toggle('done',ans[i]!==null);b.classList.toggle('cur',i===cur)});
+  $('g-count').textContent=ans.filter(a=>a!==null).length;
+}
+$('prev').onclick=()=>{if(cur>0){cur--;render()}};
+$('next').onclick=()=>{if(cur<qs.length-1){cur++;render()}};
+$('submit').onclick=()=>{
+  const un=ans.filter(a=>a===null).length;
+  $('m-title').textContent='Submit your test?';
+  $('m-body').textContent=un?`You have ${un} unanswered question${un>1?'s':''}. You cannot come back after submitting.`:'You have answered every question. You cannot come back after submitting.';
+  $('modal').classList.add('on');
+};
+$('m-no').onclick=()=>$('modal').classList.remove('on');
+$('m-yes').onclick=()=>{$('modal').classList.remove('on');finish('Complete')};
+
+/* ---------- Proctoring ---------- */
+function violation(msg,needShare){
+  if(!running||finished)return;
+  const now=Date.now();
+  if(!needShare&&now-lastV<1500)return;
+  lastV=now;violations++;vlog.push({at:new Date().toISOString(),what:msg});
+  $('b-viol').textContent='Violations: '+violations;$('b-viol').classList.add('hot');
+  toast('Violation logged: '+msg);
+  if(violations>=CONFIG.maxViolations){return finish('Ended early: too many violations (flagged for review)')}
+  if(needShare)gate('share');else if(!document.fullscreenElement)gate('fs');
+}
+function gate(kind){
+  gateKind=kind;
+  $('gate-t').textContent=kind==='share'?'Screen sharing stopped':'Return to fullscreen';
+  $('gate-p').textContent=kind==='share'?'Share your entire screen again to continue. The timer is still running.':'The test must stay in fullscreen. The timer is still running.';
+  $('gate-b').textContent=kind==='share'?'Share screen again':'Return to fullscreen';
+  $('gate').classList.add('on');
+}
+$('gate-b').onclick=async()=>{
+  try{
+    if(gateKind==='share'){
+      const s=await navigator.mediaDevices.getDisplayMedia({video:{displaySurface:'monitor'},audio:false});
+      const tr=s.getVideoTracks()[0],st=tr.getSettings?tr.getSettings():{};
+      if(st.displaySurface&&st.displaySurface!=='monitor'){tr.stop();return toast('Please share your entire screen')}
+      stream=s;tr.onended=()=>{if(running)violation('Screen sharing stopped',true)};
+    }
+    if(!document.fullscreenElement)await document.documentElement.requestFullscreen();
+    $('gate').classList.remove('on');
+  }catch(_){toast('Could not continue. Try again.')}
+};
+document.addEventListener('fullscreenchange',()=>{if(running&&!finished&&!document.fullscreenElement)violation('Left fullscreen')});
+document.addEventListener('visibilitychange',()=>{if(running&&document.hidden)violation('Switched tab or app')});
+window.addEventListener('blur',()=>{if(running&&!document.hidden)violation('Window lost focus')});
+['copy','cut','paste','contextmenu','dragstart','selectstart'].forEach(ev=>document.addEventListener(ev,e=>{if(running&&!(e.target.closest&&e.target.closest('input'))){e.preventDefault();if(ev!=='selectstart'&&ev!=='dragstart')violation('Blocked action: '+ev)}}));
+document.addEventListener('keydown',e=>{
+  if(!running)return;
+  const k=e.key.toLowerCase(),c=e.ctrlKey||e.metaKey;
+  if(k==='f12'||(c&&e.shiftKey&&['i','j','c'].includes(k))||(c&&['u','s','p','c','v','x','a'].includes(k))||k==='printscreen'){e.preventDefault();violation('Blocked shortcut')}
+});
+window.addEventListener('beforeunload',e=>{if(running&&!finished){e.preventDefault();e.returnValue=''}});
+
+/* ---------- Finish and results ---------- */
+function finish(status){
+  if(finished)return;finished=true;running=false;clearInterval(tick);
+  try{if(stream)stream.getTracks().forEach(t=>t.stop())}catch(_){}
+  try{if(document.fullscreenElement)document.exitFullscreen()}catch(_){}
+  $('gate').classList.remove('on');$('modal').classList.remove('on');
+  const used=Math.min(CONFIG.minutes*60,Math.floor((Date.now()-startedAt)/1000));
+  let score=0;const by={};TOPICS.forEach(t=>by[t]={r:0,n:0});
+  qs.forEach((q,i)=>{const ok=ans[i]!==null&&q.o[ans[i]]===q.correct;by[q.topic].n++;if(ok){score++;by[q.topic].r++}});
+  const pct=Math.round(score/qs.length*100),pass=pct>=CONFIG.passMark;
+  const flagged=violations>=CONFIG.maxViolations;
+  window.__result={name:cand.name,email:cand.email,score,total:qs.length,pct,result:pass?'PASS':'FAIL',timeUsed:fmt(used),violations,violationLog:vlog,answered:ans.filter(a=>a!==null).length,status,flaggedForReview:flagged||violations>0,byTopic:by,submittedAt:new Date().toISOString()};
+  try{localStorage.setItem('aiacademy-test-done:'+cand.email,'1')}catch(_){}
+  $('r-score').textContent=score;$('r-total').textContent=qs.length;$('r-pct').textContent=pct+'%';
+  const v=$('r-verdict');v.textContent=pass?'Pass':'Fail';v.className='verdict '+(pass?'pass':'fail');
+  $('r-time').textContent=fmt(used);$('r-viol').textContent=violations;$('r-ans').textContent=window.__result.answered+' / '+qs.length;
+  $('r-status').textContent=status.startsWith('Complete')?'Complete':(status.startsWith('Time')?'Time up':'Ended early');
+  $('r-break').innerHTML=TOPICS.map(t=>{const b=by[t],p=b.n?Math.round(b.r/b.n*100):0;return`<div class="brow"><span>${t}</span><div class="track"><div class="fill${p<70?' low':''}" style="width:${p}%"></div></div><span>${b.r}/${b.n}</span></div>`}).join('');
+  show('s-results');
+  sendResult();
+}
+async function sendResult(){
+  const el=$('r-sent');
+  if(!CONFIG.endpoint){el.textContent='Results are not sent automatically. Download your receipt below and send it to your instructor.';return}
+  el.textContent='Sending your result to your instructor…';
+  try{await fetch(CONFIG.endpoint,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain'},body:JSON.stringify(window.__result)});el.textContent='Your result was sent to your instructor. Download the receipt below to keep a copy.'}
+  catch(_){el.textContent='Your result could not be sent. Download your receipt below and send it to your instructor.'}
+}
+$('dl').onclick=()=>{
+  const r=window.__result;if(!r)return;
+  const lines=['AI ACADEMY — AI AUTOMATION PROGRAMME TEST','',`Name: ${r.name}`,`Email: ${r.email}`,`Submitted: ${r.submittedAt}`,`Score: ${r.score} / ${r.total} (${r.pct}%)`,`Result: ${r.result}`,`Time used: ${r.timeUsed}`,`Answered: ${r.answered} / ${r.total}`,`Violations: ${r.violations}`,`Status: ${r.status}`,'','Score by topic:',...Object.entries(r.byTopic).map(([k,v])=>`  ${k}: ${v.r}/${v.n}`),'','Violation log:',...(r.violationLog.length?r.violationLog.map(v=>`  ${v.at}  ${v.what}`):['  none'])];
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([lines.join('\n')],{type:'text/plain'}));a.download='ai-academy-test-receipt-'+r.name.replace(/\s+/g,'-').toLowerCase()+'.txt';document.body.appendChild(a);a.click();a.remove();
+};
+</script>
+</body>
+</html>
